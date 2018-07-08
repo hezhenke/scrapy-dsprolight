@@ -23,13 +23,13 @@ class DspImagePipeline(ImagesPipeline):
 
     def file_path(self, request, response=None, info=None):
         image_guid = request.url.split('/')[-1]
-        return "../upload/%s/full/%s"%(datetime.now().strftime("%Y%m"),image_guid)
+        return "full/%s"%(image_guid)
 
     def get_media_requests(self, item, info):
         yield scrapy.Request(item["productImg"])
 
     def item_completed(self, results, item, info):
-        image_paths = [x['path'] for ok, x in results if ok]
+        image_paths = ["../upload/%s/%s"%(datetime.now().strftime("%Y%m"),x['path']) for ok, x in results if ok]
         if len(image_paths) > 0:
             item['productImg'] = image_paths[0]
         return item
@@ -37,14 +37,14 @@ class DspImagePipeline(ImagesPipeline):
 class DspImageListPipeline(ImagesPipeline):
     def file_path(self, request, response=None, info=None):
         image_guid = request.url.split('/')[-1]
-        return "../upload/%s/full/%s"%(datetime.now().strftime("%Y%m"),image_guid)
+        return "full/%s"%(image_guid)
 
     def get_media_requests(self, item, info):
         for imageurl in item['productImgList']:
             yield scrapy.Request(imageurl)
 
     def item_completed(self, results, item, info):
-        image_paths = [x['path'] for ok, x in results if ok]
+        image_paths = ["../upload/%s/%s"%(datetime.now().strftime("%Y%m"),x['path']) for ok, x in results if ok]
         item['productImgList'] = image_paths
         return item
 
@@ -98,7 +98,7 @@ class DspPipeline(object):
         if top_cate_row is None:
             raise Exception("no top category name product")
 
-        cate_where_str = "bigclass = '55' and name='%s'"%(item['cateName'])
+        cate_where_str = "bigclass = '%d' and name='%s'"%(top_cate_row['id'],item['cateName'])
         cate_update_data = {
             'keywords':item['cateLongName'],
             'name':item['cateName']
@@ -118,7 +118,7 @@ class DspPipeline(object):
         #更新分类
         cate_row = util.insert_or_update(cursor,'met_column',cate_where_str,cate_insert_data,cate_update_data)
 
-        product_where_str = "title='%s'"
+        product_where_str = "title='%s'"%(item['productName'],)
         displayimg = self.get_displayimg(item['productName'], item['productImgList'])
         product_insert_data = {
             'title': item['productName'],

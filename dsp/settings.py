@@ -69,7 +69,7 @@ ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
     'dsp.pipelines.DspImagePipeline': 1,
     'dsp.pipelines.DspImageListPipeline': 2,
-    #'dsp.pipelines.DspPipeline': 300,
+    'dsp.pipelines.DspPipeline': 300,
 }
 IMAGES_STORE ="/data/metinfo/upload/%s"%(datetime.now().strftime("%Y%m"))
 
@@ -95,7 +95,7 @@ IMAGES_STORE ="/data/metinfo/upload/%s"%(datetime.now().strftime("%Y%m"))
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 MYSQL_HOST='localhost'#主机
-MYSQL_DBNAME='metinfo'#数据库名称
+MYSQL_DBNAME='aapa'#数据库名称
 MYSQL_USER='root'#用户名
 MYSQL_PASSWORD='Abc1234!'#密码
 
